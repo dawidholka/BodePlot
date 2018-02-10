@@ -22,7 +22,7 @@ class Chart : public QWidget
     Q_OBJECT
 
 public:
-    explicit Chart(QWidget *parent = 0);
+    explicit Chart(float amplitude, float zeros[], float poles[], int nzero, int npole,int minX, int maxX, QWidget *parent = 0);
     ~Chart();
 
 private:
@@ -33,6 +33,7 @@ private:
     QLogValueAxis *axisX;
     QChart *chart;
     QLineSeries *series;
+    QMainWindow window;
 };
 
 #endif // CHART_H

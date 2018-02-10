@@ -7,6 +7,8 @@
 QT       += core gui
 QT += charts
 
+CONFIG += static
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = GRAPH
@@ -27,12 +29,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    chart.cpp
+    chart.cpp \
+    zeros.cpp
 
 HEADERS += \
         mainwindow.h \
-    chart.h
+    chart.h \
+    zeros.h
 
 FORMS += \
         mainwindow.ui \
-    chart.ui
+    zeros.ui
