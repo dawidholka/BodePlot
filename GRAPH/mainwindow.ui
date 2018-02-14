@@ -117,6 +117,9 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <layout class="QVBoxLayout" name="polesLayout"/>
+      </item>
      </layout>
     </item>
     <item>

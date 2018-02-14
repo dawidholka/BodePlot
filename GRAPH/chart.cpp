@@ -4,6 +4,7 @@
 
 float logmodulus(float frequency, float amplitude, float zeros[], float poles[], int nzero, int npole)
 {
+    // TODO Check this !!
     float result=1;
     for(int i=0;i<nzero;i++){
         result*=(((frequency/zeros[i])*(frequency/zeros[i]))+1);
@@ -68,8 +69,8 @@ Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole
     axisY->setTitleText("Magnitude (dB)");
     axisY->setLabelFormat("%d");
     //axisY->setTickCount(series->count());
-    //axisY->setMax(axisY->max() * 1.01);
-    //axisY->setMin(axisY->min() * 0.99);
+    //axisY->setMax(5);
+    //axisY->setMin(-5);
     chart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
     chartView = new QChartView(chart);

@@ -49,6 +49,7 @@ public:
     QHBoxLayout *zerospolesLayout;
     QVBoxLayout *zerosLayout;
     QSpacerItem *horizontalSpacer_2;
+    QVBoxLayout *polesLayout;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QMenu *menuHelp;
@@ -141,6 +142,12 @@ public:
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         zerospolesLayout->addItem(horizontalSpacer_2);
+
+        polesLayout = new QVBoxLayout();
+        polesLayout->setSpacing(6);
+        polesLayout->setObjectName(QStringLiteral("polesLayout"));
+
+        zerospolesLayout->addLayout(polesLayout);
 
 
         verticalLayout_2->addLayout(zerospolesLayout);

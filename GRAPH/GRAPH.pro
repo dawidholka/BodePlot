@@ -30,13 +30,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     chart.cpp \
-    zeros.cpp
+    zeros.cpp \
+    poles.cpp
 
 HEADERS += \
         mainwindow.h \
     chart.h \
-    zeros.h
+    zeros.h \
+    poles.h
 
 FORMS += \
         mainwindow.ui \
-    zeros.ui
+    zeros.ui \
+    poles.ui

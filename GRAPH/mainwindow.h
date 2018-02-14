@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "chart.h"
 #include "zeros.h"
+#include "poles.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,6 +19,8 @@ public slots:
     void addZero();
     void removeZero(Zeros* zero);
     void setAmplitude();
+    void addPole();
+    void removePole(Poles* pole);
 
 public:
     void updateSystem();
@@ -29,6 +32,7 @@ private:
     Chart *chart;
     float amplitude;
     QVector<Zeros*> mZeros;
+    QVector<Poles*> mPoles;
 };
 
 #endif // MAINWINDOW_H
