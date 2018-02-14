@@ -3,6 +3,15 @@
 #include <QDebug>
 #include <QInputDialog>
 
+/*
+TODO Setting min and max frequency
+TODO add export to image generated plot
+TODO format chart
+TODO check math
+TODO add phase shift plot
+*/
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -31,7 +40,8 @@ void MainWindow::makeChart()
         QString value = mPoles[i]->pole();
         poles[i]=value.toFloat();
     }
-    chart = new Chart(amplitude,zeros,poles,mZeros.size(),mPoles.size(),0.001,1000);
+    chart = new Chart(amplitude,zeros,poles,mZeros.size(),mPoles.size(),-2,3);
+            //closing?
     //ui->chartLayout->addWidget(chart);
 }
 

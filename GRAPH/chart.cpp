@@ -1,6 +1,7 @@
 #include "chart.h"
 #include "ui_chart.h"
 #include <math.h>
+#include "QDebug"
 
 float logmodulus(float frequency, float amplitude, float zeros[], float poles[], int nzero, int npole)
 {
@@ -27,32 +28,17 @@ float logmodulus(float frequency, float amplitude, float zeros[], float poles[],
     return result*180/M_PI;
 }*/
 
-Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole,int minX, int maxX, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Chart)
+Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole,int minX, int maxX)
 {
-    ui->setupUi(this);
     series = new QLineSeries();
-    for(float i=0.01;i<0.01;i+=0.01){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
+    for(int i=minX;i<maxX;i++){
+        float change=pow(10,i);
+        float start=pow(10,i);
+        float end=pow(10,i+1);
+        for(float k=start;end>k;k+=change){
+            *series << QPointF(k,logmodulus(k,amplitude,zeros,poles,nzero,npole));
+        }
     }
-    for(float i=0.01;i<0.1;i+=0.01){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
-    }
-    for(float i=0.1;i<1;i+=0.1){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
-    }
-    for(int i=1;i<10;i++){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
-    }
-    for(int i=10;i<100;i+=10){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
-    }
-    for(int i=100;i<1000;i+=100){
-        *series << QPointF((float)i,logmodulus(i,amplitude,zeros,poles,nzero,npole));
-    }
-    //*series << QPointF(1.0, 1.0) << QPointF(2.0, 73.0) << QPointF(3.0, 268.0) << QPointF(4.0, 17.0)
-               // << QPointF(5.0, 4325.0) << QPointF(6.0, 723.0);
     chart = new QChart();
     chart->addSeries(series);
     chart->legend()->hide();
@@ -62,7 +48,7 @@ Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole
     axisX->setLabelFormat("%f");
     axisX->setBase(10.0);
     axisX->setMinorTickCount(-1);
-    axisX->setRange(minX,maxX);
+    axisX->setRange(pow(10,minX),pow(10,maxX));
     chart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
     axisY = new QValueAxis();
@@ -79,9 +65,11 @@ Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole
     window.resize(800, 600);
     window.setWindowTitle("Bode polt");
     window.show();
+    //handle close event somehow
 }
 
 Chart::~Chart()
 {
+    qDebug() << "END?";
     delete ui;
 }
