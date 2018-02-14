@@ -24,16 +24,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="deletePoleButton">
+      <widget class="QPushButton" name="changeValueButton">
        <property name="text">
-        <string>Delete Pole</string>
+        <string>Change Value</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="changeValueButton">
+      <widget class="QPushButton" name="deletePoleButton">
        <property name="text">
-        <string>Change Value</string>
+        <string>Delete Pole</string>
        </property>
       </widget>
      </item>
