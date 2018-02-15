@@ -21,6 +21,7 @@ public slots:
     void setAmplitude();
     void addPole();
     void removePole(Poles* pole);
+    void updateFrequency();
 
 public:
     void updateSystem();
@@ -33,6 +34,8 @@ private:
     float amplitude;
     QVector<Zeros*> mZeros;
     QVector<Poles*> mPoles;
+    int minFrequency;
+    int maxFrequency;
 };
 
 #endif // MAINWINDOW_H

@@ -8,6 +8,7 @@ TODO Setting min and max frequency
 TODO add export to image generated plot
 TODO format chart
 TODO check math
+TODO zero, pole in 0 / system G(s) = s/s
 TODO add phase shift plot
 */
 
@@ -23,7 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->addZeroButton,&QPushButton::clicked,this,&MainWindow::addZero);
     connect(ui->addPoleButton,&QPushButton::clicked,this,&MainWindow::addPole);
     connect(ui->setAmplitudeButton,&QPushButton::clicked,this,&MainWindow::setAmplitude);
+    connect(ui->minFrequencySpinBox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),this,&MainWindow::updateFrequency);
+    connect(ui->maxFrequencySpinBox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),this,&MainWindow::updateFrequency);
     amplitude = 1;
+    minFrequency = -3;
+    maxFrequency = 3;
     //updateSystem();
 }
 
@@ -40,7 +45,7 @@ void MainWindow::makeChart()
         QString value = mPoles[i]->pole();
         poles[i]=value.toFloat();
     }
-    chart = new Chart(amplitude,zeros,poles,mZeros.size(),mPoles.size(),-2,3);
+    chart = new Chart(amplitude,zeros,poles,mZeros.size(),mPoles.size(),minFrequency,maxFrequency);
             //closing?
     //ui->chartLayout->addWidget(chart);
 }
@@ -135,6 +140,12 @@ void MainWindow::setAmplitude()
         ui->amplitudeLabel->setText(QString("%1").arg(amplitude));
     }
 
+}
+
+void MainWindow::updateFrequency()
+{
+    minFrequency = ui->minFrequencySpinBox->value();
+    maxFrequency = ui->maxFrequencySpinBox->value();
 }
 
 MainWindow::~MainWindow()

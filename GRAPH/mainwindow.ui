@@ -57,6 +57,26 @@
        </layout>
       </item>
       <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -100,7 +120,14 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="frequencyLayout">
       <item>
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
@@ -117,32 +144,48 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Min frequency 10^-2</string>
+         <string>Min frequency 10^</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Change</string>
+       <widget class="QSpinBox" name="minFrequencySpinBox">
+        <property name="minimum">
+         <number>-99</number>
+        </property>
+        <property name="maximum">
+         <number>98</number>
+        </property>
+        <property name="value">
+         <number>-3</number>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>max frequency 10^3</string>
+         <string>max frequency 10^</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Change</string>
+       <widget class="QSpinBox" name="maxFrequencySpinBox">
+        <property name="minimum">
+         <number>-98</number>
+        </property>
+        <property name="value">
+         <number>3</number>
         </property>
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="Line" name="line_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="zerospolesLayout">
