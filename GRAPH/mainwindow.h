@@ -5,6 +5,7 @@
 #include "chart.h"
 #include "zeros.h"
 #include "poles.h"
+#include "graph.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public slots:
     void addPole();
     void removePole(Poles* pole);
     void updateFrequency();
+    void makeGraph();
 
 public:
     void updateSystem();
@@ -31,11 +33,15 @@ public:
 private:
     Ui::MainWindow *ui;
     Chart *chart;
-    float amplitude;
+    double amplitude;
     QVector<Zeros*> mZeros;
     QVector<Poles*> mPoles;
     int minFrequency;
     int maxFrequency;
+
+
+
+    Graph *graph;
 };
 
 #endif // MAINWINDOW_H

@@ -31,15 +31,20 @@ SOURCES += \
         mainwindow.cpp \
     chart.cpp \
     zeros.cpp \
-    poles.cpp
+    poles.cpp \
+    plot.cpp \
+    graph.cpp
 
 HEADERS += \
         mainwindow.h \
     chart.h \
     zeros.h \
-    poles.h
+    poles.h \
+    plot.h \
+    graph.h
 
 FORMS += \
         mainwindow.ui \
     zeros.ui \
-    poles.ui
+    poles.ui \
+    plot.ui

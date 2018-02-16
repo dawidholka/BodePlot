@@ -4,11 +4,8 @@
 #include <QInputDialog>
 
 /*
-TODO Setting min and max frequency
 TODO add export to image generated plot
-TODO format chart
 TODO check math
-TODO zero, pole in 0 / system G(s) = s/s
 TODO add phase shift plot
 */
 
@@ -19,8 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mZeros()
 {
     ui->setupUi(this);
-    connect(ui->makeChartButton, &QPushButton::clicked,
-    this, &MainWindow::makeChart);
     connect(ui->addZeroButton,&QPushButton::clicked,this,&MainWindow::addZero);
     connect(ui->addPoleButton,&QPushButton::clicked,this,&MainWindow::addPole);
     connect(ui->setAmplitudeButton,&QPushButton::clicked,this,&MainWindow::setAmplitude);
@@ -30,10 +25,38 @@ MainWindow::MainWindow(QWidget *parent) :
     minFrequency = -3;
     maxFrequency = 3;
     //updateSystem();
+    //prepareChart(); TODO!
+    connect(ui->testButton, &QPushButton::clicked,this, &MainWindow::makeGraph);
+    graph = new Graph();
+    graph->resize(800,600);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, Qt::black);
+    graph->setAutoFillBackground(true);
+    graph->setPalette(pal);
+}
+
+void MainWindow::makeGraph()
+{
+    qDebug() << "Making Graph";
+    double* zeros = new double[mZeros.size()];
+    for(int i=0; i<mZeros.size();i++){
+        QString value = mZeros[i]->zero();
+        zeros[i]=value.toFloat();
+    }
+    double* poles = new double[mPoles.size()];
+    for(int i=0; i<mPoles.size();i++){
+        QString value = mPoles[i]->pole();
+        poles[i]=value.toFloat();
+    }
+    graph->setupGraph(amplitude,zeros,poles,mZeros.size(),mPoles.size(),minFrequency,maxFrequency);
+    graph->show();
 }
 
 void MainWindow::makeChart()
 {
+    // changing data and showing window
+    // delete old series
+
     qDebug() << "Making Chart";
     float* zeros = new float[mZeros.size()];
     for(int i=0; i<mZeros.size();i++){
@@ -108,6 +131,9 @@ void MainWindow::updateSystem()
             qDebug() << "++";
             zero*=-1;
             systemZeros.append(QString("(s+%1)").arg(zero));
+        }else if(zero==0){
+            qDebug() << 0;
+            systemZeros.append(QString("s"));
         }else{
             qDebug() << "--";
             systemZeros.append(QString("(s-%1)").arg(zero));
@@ -123,6 +149,9 @@ void MainWindow::updateSystem()
             qDebug() << "++";
             pole*=-1;
             systemPoles.append(QString("(s+%1)").arg(pole));
+        }else if(pole==0){
+            qDebug() << 0;
+            systemPoles.append(QString("s"));
         }else{
             qDebug() << "--";
             systemPoles.append(QString("(s-%1)").arg(pole));
@@ -150,5 +179,7 @@ void MainWindow::updateFrequency()
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "MainWindow destructor";
+    delete graph;
     delete ui;
 }

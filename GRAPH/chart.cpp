@@ -32,6 +32,7 @@ float logmodulus(float frequency, float amplitude, float zeros[], float poles[],
 
 Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole,int minX, int maxX)
 {
+    window = new QMainWindow();
     series = new QLineSeries();
     for(int i=minX;i<maxX;i++){
         float change=pow(10,i);
@@ -83,17 +84,35 @@ Chart::Chart(float amplitude, float zeros[], float poles[], int nzero, int npole
     // TODO Add saving plot to file in menubar!
     createAction();
     createMenu();
+    QWidget *topFiller = new QWidget;
+    topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    window.setCentralWidget(chartView);
-    window.resize(800, 600);
-    window.setWindowTitle("Bode plot");
+    infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to invoke a context menu</i>"));
+    infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    infoLabel->setAlignment(Qt::AlignCenter);
+
+    QWidget *bottomFiller = new QWidget;
+    bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QVBoxLayout *layout = new QVBoxLayout;
+        layout->setMargin(5);
+        layout->addWidget(topFiller);
+        layout->addWidget(infoLabel);
+        layout->addWidget(bottomFiller);
+    window->setLayout(layout);
+    window->setCentralWidget(chartView);
+    window->resize(800, 600);
+    window->setWindowTitle("Bode plot");
 
 
-    QPalette pal = window.palette();
+    QPalette pal = window->palette();
     pal.setColor(QPalette::Window, QRgb(0x40434a));
     pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
-    window.show();
+    if(!window){
+        window = new QMainWindow(this);
+    }
+    window->show();
     //handle close event somehow
+
 }
 
 void Chart::createAction()
@@ -111,17 +130,17 @@ void Chart::newFile()
 
 void Chart::createMenu()
 {
-    plotMenu = menuBar()->addMenu(tr("&File"));
-    plotMenu->addAction(newAct);
-   // plotMenu->addAction(openAct);
-    //plotMenu->addAction(saveAct);
-    //plotMenu->addAction(printAct);
-    plotMenu->addSeparator();
-    //plotMenu->addAction(exitAct);
+
 }
 
 Chart::~Chart()
 {
     qDebug() << "END?";
     delete ui;
+}
+
+void Chart::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "END?";
+
 }

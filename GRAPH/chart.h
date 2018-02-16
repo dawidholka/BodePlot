@@ -11,34 +11,40 @@
 #include <QGridLayout>
 #include <QMenuBar>
 #include <QMainWindow>
+#include <QLabel>
 
 
 
 using namespace QtCharts;
 class QMenu;
+class QLabel;
 
 namespace Ui {
 class Chart;
 }
 
-class Chart : public QMainWindow
+class Chart : public QWidget
 {
     Q_OBJECT
 
 public:
     Chart(float amplitude, float zeros[], float poles[], int nzero, int npole,int minX, int maxX);
     ~Chart();
+protected:
+    void closeEvent(QCloseEvent *event) override;
 private slots:
     void newFile();
 private:
     Ui::Chart *ui;
+    QVBoxLayout *vbox;
+    QLabel *infoLabel;
     QGridLayout* gridLayout;
     QChartView *chartView;
     QValueAxis *axisY;
     QLogValueAxis *axisX;
     QChart *chart;
     QLineSeries *series;
-    QMainWindow window;
+    QMainWindow *window;
     QMenu *plotMenu;
     void createMenu();
     void createAction();

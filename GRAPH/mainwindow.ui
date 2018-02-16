@@ -110,13 +110,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="makeChartButton">
-        <property name="text">
-         <string>Make Chart</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
     <item>
@@ -222,6 +215,21 @@
        </size>
       </property>
      </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="testButton">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Make Chart</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
