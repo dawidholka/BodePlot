@@ -32,7 +32,6 @@ SOURCES += \
     chart.cpp \
     zeros.cpp \
     poles.cpp \
-    plot.cpp \
     graph.cpp
 
 HEADERS += \
@@ -40,11 +39,9 @@ HEADERS += \
     chart.h \
     zeros.h \
     poles.h \
-    plot.h \
     graph.h
 
 FORMS += \
         mainwindow.ui \
     zeros.ui \
-    poles.ui \
-    plot.ui
+    poles.ui

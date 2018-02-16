@@ -60,7 +60,6 @@ void Graph::exportToImage()
                 file.errorString());
             return;
         }
-
         chartView->grab().save(fileName);
     }
 }
@@ -94,60 +93,30 @@ void Graph::setupGraph(double amplitude, double zeros[], double poles[], int nze
             minimum = yValues[i].y();
         }
     }
-    qDebug() << "Minimum: " << minimum;
-    qDebug() << "Maximum: " << maximum;
     int minDb = (minimum/10)-2;
     int maxDb = (maximum/10)+2;
-    qDebug() << "Minimum: " << minDb;
-    qDebug() << "Maximum: " << maxDb;
     axisY->setRange(minDb*10,maxDb*10);
     axisY->setTickCount(maxDb-minDb+1);
-
-/*
-
-
-    // TODO Add saving plot to file in menubar!
-    createAction();
-    createMenu();
-    QWidget *topFiller = new QWidget;
-    topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    infoLabel = new QLabel(tr("<i>Choose a menu option, or right-click to invoke a context menu</i>"));
-    infoLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    infoLabel->setAlignment(Qt::AlignCenter);
-
-    QWidget *bottomFiller = new QWidget;
-    bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QVBoxLayout *layout = new QVBoxLayout;
-        layout->setMargin(5);
-        layout->addWidget(topFiller);
-        layout->addWidget(infoLabel);
-        layout->addWidget(bottomFiller);
-    window->setLayout(layout);
-    window->setCentralWidget(chartView);
-    window->resize(800, 600);
-    window->setWindowTitle("Bode plot");
-
-
-    QPalette pal = window->palette();
-    pal.setColor(QPalette::Window, QRgb(0x40434a));
-    pal.setColor(QPalette::WindowText, QRgb(0xd6d6d6));
-    if(!window){
-        window = new QMainWindow(this);
-    }
-    window->show();*/
 }
 
-
-//TODO !!!!!!!!! BAD FORMULA !!!!!!!!!!!
 double Graph::calcMagnitude(double frequency, double amplitude, double zeros[], double poles[], int nzero, int npole)
 {
     double result=1;
     for(int i=0;i<nzero;i++){
-        result*=(((frequency/zeros[i])*(frequency/zeros[i]))+1);
+        if(zeros[i]==0){
+            result*=(frequency*frequency);
+        }else{
+            amplitude*=fabs(zeros[i]);
+            result*=(((frequency/zeros[i])*(frequency/zeros[i]))+1);
+        }
     }
     for(int i=0;i<npole;i++){
-        result/=(((frequency/poles[i])*(frequency/poles[i]))+1);
+        if(poles[i]==0){
+            result/=(frequency*frequency);
+        }else{
+            amplitude/=fabs(poles[i]);
+            result/=(((frequency/poles[i])*(frequency/poles[i]))+1);
+        }
     }
     return 20*log10(fabs(amplitude)*sqrt(result));
 }

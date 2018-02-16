@@ -4,8 +4,7 @@
 #include <QInputDialog>
 
 /*
-TODO add export to image generated plot
-TODO check math
+TODO better UI at mainwindow
 TODO add phase shift plot
 */
 
@@ -24,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     amplitude = 1;
     minFrequency = -3;
     maxFrequency = 3;
-    //updateSystem();
-    //prepareChart(); TODO!
     connect(ui->testButton, &QPushButton::clicked,this, &MainWindow::makeGraph);
     graph = new Graph();
     graph->resize(800,600);
@@ -52,31 +49,10 @@ void MainWindow::makeGraph()
     graph->show();
 }
 
-void MainWindow::makeChart()
-{
-    // changing data and showing window
-    // delete old series
-
-    qDebug() << "Making Chart";
-    float* zeros = new float[mZeros.size()];
-    for(int i=0; i<mZeros.size();i++){
-        QString value = mZeros[i]->zero();
-        zeros[i]=value.toFloat();
-    }
-    float* poles = new float[mPoles.size()];
-    for(int i=0; i<mPoles.size();i++){
-        QString value = mPoles[i]->pole();
-        poles[i]=value.toFloat();
-    }
-    chart = new Chart(amplitude,zeros,poles,mZeros.size(),mPoles.size(),minFrequency,maxFrequency);
-            //closing?
-    //ui->chartLayout->addWidget(chart);
-}
-
 void MainWindow::addZero()
 {
     bool ok;
-    QString name = QString("%1").arg(QInputDialog::getInt(this,tr("Add zero"),tr("Zero"),0,-2147483647,2147483647,1,&ok));
+    QString name = QString("%1").arg(QInputDialog::getDouble(this,tr("Add zero"),tr("Zero value: "),0,-2147483647,2147483647,7,&ok));
     if(ok && !name.isEmpty()){
         qDebug() << "Adding new zero";
         Zeros* zero = new Zeros(name);
@@ -90,7 +66,7 @@ void MainWindow::addZero()
 void MainWindow::addPole()
 {
     bool ok;
-    QString name = QString("%1").arg(QInputDialog::getInt(this,tr("Add pole"),tr("Pole"),0,-2147483647,2147483647,1,&ok));
+    QString name = QString("%1").arg(QInputDialog::getDouble(this,tr("Add pole"),tr("Pole value:"),0,-2147483647,2147483647,7,&ok));
     if(ok && !name.isEmpty()){
         qDebug() << "Adding new pole";
         Poles* pole = new Poles(name);

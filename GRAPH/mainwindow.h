@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "chart.h"
 #include "zeros.h"
 #include "poles.h"
 #include "graph.h"
@@ -16,7 +15,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public slots:
-    void makeChart();
     void addZero();
     void removeZero(Zeros* zero);
     void setAmplitude();
@@ -32,7 +30,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    Chart *chart;
     double amplitude;
     QVector<Zeros*> mZeros;
     QVector<Poles*> mPoles;
