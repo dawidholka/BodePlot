@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVBoxLayout>
 #include "zeros.h"
 #include "poles.h"
 #include "graph.h"
@@ -30,15 +31,16 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QScrollArea *scroll;
+    QScrollArea *polesScroll;
     double amplitude;
     QVector<Zeros*> mZeros;
     QVector<Poles*> mPoles;
     int minFrequency;
     int maxFrequency;
-
-
-
     Graph *graph;
+    QVBoxLayout *zerosLayoutScroll;
+    QVBoxLayout *polesLayoutScroll;
 };
 
 #endif // MAINWINDOW_H

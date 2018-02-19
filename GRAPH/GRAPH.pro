@@ -29,14 +29,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    chart.cpp \
     zeros.cpp \
     poles.cpp \
     graph.cpp
 
 HEADERS += \
         mainwindow.h \
-    chart.h \
     zeros.h \
     poles.h \
     graph.h

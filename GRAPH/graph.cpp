@@ -3,12 +3,13 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <math.h>
 
 Graph::Graph(QWidget *parent) : QWidget(parent)
 {
     closeButton = new QPushButton(tr("&Close"));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
-    QVBoxLayout *layout = new QVBoxLayout;
+    layout = new QVBoxLayout;
     setLayout(layout);
     setWindowTitle(tr("Bode plot"));
     series = new QLineSeries();
@@ -38,12 +39,41 @@ Graph::Graph(QWidget *parent) : QWidget(parent)
     //graphMenu->addAction("Export to .jpg");
     //graphMenu->addAction("Clean");
     layout->setMenuBar(menuBar);
-
     exportToImageAct = new QAction(tr("&Export"),this);
     exportToImageAct->setShortcut(QKeySequence::Save);
     exportToImageAct->setStatusTip("Export graph as a image to a file");
     connect(exportToImageAct,&QAction::triggered,this,&Graph::exportToImage);
     graphMenu->addAction(exportToImageAct);
+
+
+
+    phaseSeries = new QLineSeries();
+    phaseChart = new QChart();
+    phaseChart->legend()->hide();
+    phaseChart->addSeries(phaseSeries);
+    phaseChart->setTitle("Phase shift plot");
+    phaseAxisX = new QLogValueAxis();
+    phaseAxisX->setTitleText("Frequency (rad/s)");
+    phaseAxisX->setBase(10.0);
+    phaseAxisX->setMinorTickCount(-1);
+    phaseChart->addAxis(phaseAxisX, Qt::AlignBottom);
+    phaseSeries->attachAxis(phaseAxisX);
+    phaseAxisY = new QValueAxis();
+    phaseAxisY->setTitleText("Phase (deg)");
+    phaseAxisY->setLabelFormat("%d");
+    phaseChart->addAxis(phaseAxisY, Qt::AlignLeft);
+    phaseSeries->attachAxis(phaseAxisY);
+    phaseChartView = new QChartView(phaseChart);
+    phaseChartView->setRenderHint(QPainter::Antialiasing);
+    phaseChartView->chart()->setTheme(QChart::ChartThemeDark);
+    layout->insertWidget(1,phaseChartView);
+    phaseChartView->setMinimumHeight(300);
+    chartView->setMinimumHeight(300);
+    chartView->setMinimumWidth(800);
+    phaseChartView->hide();
+
+
+
 
 }
 
@@ -64,15 +94,22 @@ void Graph::exportToImage()
     }
 }
 
-void Graph::setupGraph(double amplitude, double zeros[], double poles[], int nzero, int npole,int minX, int maxX)
+void Graph::setupGraph(double amplitude, double zeros[], double poles[], int nzero, int npole,int minX, int maxX, bool makePhaseShiftGraph)
 {
+    if(makePhaseShiftGraph){
+        phaseChartView->show();
+    }else{
+        phaseChartView->hide();
+    }
     series->clear();
+    phaseSeries->clear();
     for(int i=minX;i<maxX;i++){
         float change=pow(10,i);
         float start=pow(10,i);
         float end=pow(10,i+1);
         for(float k=start;end>k;k+=change){
             *series << QPointF(k,calcMagnitude(k,amplitude,zeros,poles,nzero,npole));
+            *phaseSeries << QPointF(k,calcPhase(k,amplitude,zeros,poles,nzero,npole));
         }
     }
     char format[] = "%.0f";
@@ -82,6 +119,8 @@ void Graph::setupGraph(double amplitude, double zeros[], double poles[], int nze
     }
     axisX->setLabelFormat(format);
     axisX->setRange(pow(10,minX),pow(10,maxX));
+    phaseAxisX->setLabelFormat(format);
+    phaseAxisX->setRange(pow(10,minX),pow(10,maxX));
     QVector<QPointF> yValues = series->pointsVector();
     float minimum = yValues[0].y();
     float maximum = yValues[0].y();
@@ -97,6 +136,32 @@ void Graph::setupGraph(double amplitude, double zeros[], double poles[], int nze
     int maxDb = (maximum/10)+2;
     axisY->setRange(minDb*10,maxDb*10);
     axisY->setTickCount(maxDb-minDb+1);
+    phaseAxisY->setRange(-90,90);
+   // phaseAxisY->setTickCount(maxDb-minDb+1);
+}
+
+double Graph::calcPhase(double frequency, double amplitude, double zeros[], double poles[], int nzero, int npole)
+{
+    double result=0;
+    for(int i=0;i<nzero;i++){
+        //if(zeros[i]==0){
+            //result-=(frequency*frequency);
+        //}else{
+            //amplitude*=fabs(zeros[i]);
+            result-=atan(frequency/zeros[i]);
+        //}
+    }
+    for(int i=0;i<npole;i++){
+        //(poles[i]==0){
+        //    result/=(frequency*frequency);
+        //}else{
+            //amplitude/=fabs(poles[i]);
+            result+=atan(frequency/poles[i]);
+        //}
+    }
+    qDebug() << result* 180.0/M_PI;
+    return result * 180.0/M_PI;
+
 }
 
 double Graph::calcMagnitude(double frequency, double amplitude, double zeros[], double poles[], int nzero, int npole)

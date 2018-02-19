@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QInputDialog>
+#include <QCheckBox>
+
 
 /*
 TODO better UI at mainwindow
@@ -24,16 +26,35 @@ MainWindow::MainWindow(QWidget *parent) :
     minFrequency = -3;
     maxFrequency = 3;
     connect(ui->testButton, &QPushButton::clicked,this, &MainWindow::makeGraph);
+
     graph = new Graph();
-    graph->resize(800,600);
+    //graph->resize(800,600);
     QPalette pal = palette();
     pal.setColor(QPalette::Background, Qt::black);
     graph->setAutoFillBackground(true);
     graph->setPalette(pal);
+
+    scroll = new QScrollArea;
+    scroll->setWidgetResizable(true);
+    scroll->setWidget(ui->zerosWidget);
+    zerosLayoutScroll = new QVBoxLayout(ui->zerosWidget);
+    ui->zerosLayout->addWidget(scroll);
+
+    polesScroll = new QScrollArea;
+    polesScroll->setWidgetResizable(true);
+    polesScroll->setWidget(ui->polesWidget);
+    polesLayoutScroll = new QVBoxLayout(ui->polesWidget);
+    ui->polesLayout->addWidget(polesScroll);
+
 }
 
 void MainWindow::makeGraph()
 {
+    bool makePhaseShiftGraph = false;
+    if(ui->phaseShiftCheckBox->isChecked()){
+        qDebug() << "Add a phase shift graph";
+        makePhaseShiftGraph = true;
+    }
     qDebug() << "Making Graph";
     double* zeros = new double[mZeros.size()];
     for(int i=0; i<mZeros.size();i++){
@@ -45,7 +66,7 @@ void MainWindow::makeGraph()
         QString value = mPoles[i]->pole();
         poles[i]=value.toFloat();
     }
-    graph->setupGraph(amplitude,zeros,poles,mZeros.size(),mPoles.size(),minFrequency,maxFrequency);
+    graph->setupGraph(amplitude,zeros,poles,mZeros.size(),mPoles.size(),minFrequency,maxFrequency,makePhaseShiftGraph);
     graph->show();
 }
 
@@ -58,7 +79,7 @@ void MainWindow::addZero()
         Zeros* zero = new Zeros(name);
         connect(zero, &Zeros::removed,this,&MainWindow::removeZero);
         mZeros.append(zero);
-        ui->zerosLayout->addWidget(zero);
+        zerosLayoutScroll->addWidget(zero);
         updateSystem();
     }
 }
@@ -72,7 +93,7 @@ void MainWindow::addPole()
         Poles* pole = new Poles(name);
         connect(pole, &Poles::removed,this,&MainWindow::removePole);
         mPoles.append(pole);
-        ui->polesLayout->addWidget(pole);
+        polesLayoutScroll->addWidget(pole);
         updateSystem();
     }
 }
